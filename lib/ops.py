@@ -4,6 +4,7 @@ import re
 import shutil
 import fileinput
 import codecs
+import chardet
 
 special_chars = re.compile("[^a-zA-Z0-9_\-]")
 conditional_line = re.compile("\s*\[System.Diagnostics.Conditional\(\"(.*?)\"\)\]")
@@ -185,7 +186,7 @@ def get_encoding(file_path):
     if raw.startswith(codecs.BOM_UTF8):
         encoding = 'utf-8-sig'
     else:
-        result = codecs.chardet.detect(raw)
+        result = chardet.detect(raw)
         encoding = result['encoding']
 
     return encoding

@@ -1,0 +1,9 @@
+name: se_mod_builder
+channels:
+  - defaults
+dependencies:
+  - python>=2.7
+  - pip
+  - pip:
+    - chardet
+    - pyyaml

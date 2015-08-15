@@ -52,17 +52,17 @@ def load(config_file_path):
         dist_config['dir_name'] = dir_name
         dist_config['path'] = os.path.join(se_mods_dir, dir_name)
 
-        # TODO actually pull this from config
+        # TODO: pull cleanup_ignores from config
         dist_config['cleanup_ignores'] = ["^modinfo\.sbmi"]
         dist_config['cleanup_ignore_rgx'] = [
             re.compile(ignore_str) for ignore_str in dist_config['cleanup_ignores']
         ]
-
+        if not dist_config.get('cleanup_ignore_rgx'):
+            dist_config['cleanup_ignore_rgx'] = []
 
         compile_symbols_to_remove = dist_config.get('compile_symbols_to_remove')
         if not compile_symbols_to_remove:
-            # clean this up so later code doesn't have to check for existence
-            dist_config['compile_symbols_to_remove'] = None
+            dist_config['compile_symbols_to_remove'] = []
 
     # tools
     mwm_builder_path = "{0}".format(config.get('mwm_builder_path'))

@@ -15,26 +15,46 @@ import os
 import os.path
 import sys
 
-
-
 import lib
 
-import re
+# import re
+
+BUILD_CONFIG_FILENAME = "build_config.yml"
 
 
 def build_distro():
     print("\n\n------- SEModHelpers Python Build Script  -------\n")
 
+    # === Parse Args
+
+    if sys.argv.__len__() < 2:
+        print("Please supply a path to your mod as the first argument. Aborting.")
+        return
+
+    target_dir = sys.argv[1]
+
+    if not os.path.exists(target_dir):
+        print("Could not find mod directory at \"" + target_dir + "\". Aborting.")
+        return
+
+    print("Running on mod at \"{0}\"".format(target_dir))
+
     # === Get Build Script paths
 
     build_script_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
-    print("Running from " + build_script_dir)
     build_model_path = os.path.join(build_script_dir, 'build_model.py')
 
-    build_config_path = lib.paths.find_file_up(
-        "build_config.yml", build_script_dir, 4
-    )
-    if build_config_path:
+    print("Running from \"{0}\"".format(build_script_dir))
+
+    # === Get target mod config
+
+    #build_config_path = lib.paths.find_file_up(
+    #    "build_config.yml", build_script_dir, 4
+    #)
+
+    build_config_path = os.path.join(target_dir, BUILD_CONFIG_FILENAME)
+
+    if os.path.exists(build_config_path):
         print("Config file found at " + build_config_path)
     else:
         print("build_config.yml is missing. Aborting script.")
@@ -63,9 +83,10 @@ def build_distro():
         #for k,v in dist_config.items():
         #    print("     {0}: {1}".format(k, v))
         print("     {0}: {1}".format('Path', dist_config['path']))
-        print("     {0}: {1}".format('cleanup_ignores', dist_config['cleanup_ignores']))
-        print("     {0}: {1}".format('compile_symbols_to_remove', dist_config['compile_symbols_to_remove']))
+        print("     {0}: {1}".format('cleanup_ignores', ", ".join(dist_config['cleanup_ignores'])))
+        print("     {0}: {1}".format('compile_symbols_to_remove', ", ".join(dist_config['compile_symbols_to_remove'])))
     print("")
+
 
     print("MWM Builder Path: " + mwm_builder_path)
     print("")
@@ -74,7 +95,8 @@ def build_distro():
 
     print("----- Running Build ----- \n")
 
-    # Start MWM Builder, which runs in parallel
+    # TODO: Start MWM Builder, which runs in parallel
+    """
     print("--- Starting MWM Model Builder Threads --- ")
     mwm_processes = lib.build.process_models(
         source_modules, build_model_path, mwm_builder_path
@@ -85,6 +107,7 @@ def build_distro():
     else:
         print("no mwm_processes running")
     print("")
+    """
 
     # Clean Destinations
     print("--- Cleaning Dist Dirs ---")
@@ -101,7 +124,7 @@ def build_distro():
     lib.build.distribute(source_modules, distributions,
                      [["Scripts"],["Data", "Scripts"]], "cs",
                      dist_content_path = ["Data", "Scripts"],
-                     squash_modules=False)  # , squash_dirs=True)
+                     squash_modules=False, squash_dirs=True)
     print("")
 
     # Copy Textures
@@ -110,7 +133,8 @@ def build_distro():
     print("\n")
 
 
-    # Copy Models once they're built
+    # TODO: Copy Models once they're built
+    """
     if mwm_processes_count > 0:
         print("waiting for our mwm processes to finish")
         for mwm_process in mwm_processes:
@@ -119,7 +143,7 @@ def build_distro():
     print(" --- Distributing Models --- ")
     lib.build.distribute(source_modules, distributions, [["Model"]], "mwm")
     print("\n")
-
+    """
 
     print("------- SEModHelpers Python Build Complete  ------- \n")
 
