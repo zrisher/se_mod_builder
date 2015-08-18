@@ -7,7 +7,7 @@ publishing.
 * Python 2.7 or greater
 * Conda (Miniconda or Anaconda)
 
-** When we deploy this to an exe the above requirements will be removed. **
+**When we deploy this to an exe the above requirements will be removed.**
 
 ## Installation
 * Copy build_config.example.yml to the top-level directory of your mod
@@ -26,6 +26,7 @@ The build script can work with either a module-based structure or a flat one.
 
 A fully-deployed SE mod will have the file structure:
 
+```
   ModName
     - Data
         - Scripts
@@ -37,17 +38,21 @@ A fully-deployed SE mod will have the file structure:
     - Textures
         - ... various levels and folders ...
             - *.dds
+```
 
 With this script, you can use either:
 
+```
   ModName
     - Data
         - Scripts
     - Models
     - Textures
+```
 
 Or (using config option has_modules = true):
 
+```
   ModSourceFolder
     - Module1
         - Data
@@ -57,5 +62,5 @@ Or (using config option has_modules = true):
         - Data
         - Textures
     ... etc ...
-
+```
 
