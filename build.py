@@ -11,6 +11,7 @@
 #
 # The Dev version has logging enabled
 
+import datetime
 import os
 import os.path
 import sys
@@ -145,7 +146,7 @@ def build_distro():
     print("\n")
     """
 
-    print("------- SEModHelpers Python Build Complete  ------- \n")
+    print("------ SEModHelpers Python Build Completed at {0} ------- \n".format(datetime.datetime.now()))
 
 
 if __name__ == '__main__':
