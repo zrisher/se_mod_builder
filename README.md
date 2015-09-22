@@ -13,6 +13,11 @@ publishing.
 * Copy build_config.example.yml to the top-level directory of your mod
 * Remove the ".example" from its name and fill in your own configuration details
 * Run `conda env create` in the se_mod_builder dir
+* If PyYaml fails to install:
+  * Download the relevant installer from [pypi](https://pypi.python.org/pypi/PyYAML).
+  * Run the installer
+  * Copy the install files from `..\Miniconda\Lib\site-packages` to `..\Miniconda\envs\se_mod_builder\Lib\site-packages`
+  * `conda env update`
 
 ## Usage
 ```
