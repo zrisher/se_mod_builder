@@ -49,6 +49,8 @@ def distribute(source_modules, distributions, source_content_paths, extension,
     If squashing, prepend folder names to files to guard against collisions
     """
 
+    has_modules = len(source_modules.items()) > 1
+
     for module_name, module_path in source_modules.items():
         for source_content_path in source_content_paths:
 
@@ -59,15 +61,26 @@ def distribute(source_modules, distributions, source_content_paths, extension,
 
             for dist_key, dist in distributions.items():
 
-                if squash_modules:
+                if has_modules:
+                    if squash_modules:
+                        dist_content_path_full = os.path.join(dist['path'],
+                                                              *dist_content_path)
+                        file_prefix = module_name + "."
+                    else:
+                        dist_content_path_full = os.path.join(
+                            os.path.join(dist['path'], *dist_content_path),
+                            module_name)
+                        file_prefix = ""
+                else:
+
+                    # Scripts requires a namespace directory to load
+                    if dist_content_path[-1] == "Scripts":
+                       dist_content_path.append(module_name)
+
                     dist_content_path_full = os.path.join(dist['path'],
                                                           *dist_content_path)
-                    file_prefix = module_name + "."
-                else:
-                    dist_content_path_full = os.path.join(
-                        os.path.join(dist['path'], *dist_content_path),
-                        module_name)
                     file_prefix = ""
+
 
                 ops.deep_copy_files_with_extension(
                     module_content_full_path, dist_content_path_full, extension,

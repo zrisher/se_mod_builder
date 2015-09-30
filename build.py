@@ -125,7 +125,7 @@ def build_distro():
     lib.build.distribute(source_modules, distributions,
                      [["Scripts"],["Data", "Scripts"]], "cs",
                      dist_content_path = ["Data", "Scripts"],
-                     squash_modules=False, squash_dirs=True)
+                     squash_dirs=True)
     print("")
 
     # Copy Textures
