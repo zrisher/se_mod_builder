@@ -134,17 +134,19 @@ def build_distro():
     print("\n")
 
 
-    # TODO: Copy Models once they're built
+    # TODO: Wait for MWM Builder to complete before distributing models
     """
     if mwm_processes_count > 0:
         print("waiting for our mwm processes to finish")
         for mwm_process in mwm_processes:
             mwm_process.wait()
-
-    print(" --- Distributing Models --- ")
-    lib.build.distribute(source_modules, distributions, [["Model"]], "mwm")
-    print("\n")
     """
+
+    # Copy Models
+    print(" --- Distributing Models --- ")
+    lib.build.distribute(source_modules, distributions, [["Models"]], "mwm")
+    print("\n")
+
 
     print("------ SEModHelpers Python Build Completed at {0} ------- \n".format(datetime.datetime.now()))
 
