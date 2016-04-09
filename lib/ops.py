@@ -83,6 +83,10 @@ def deep_copy_files_with_extension(source, destination, extension,
 
             current_file_prefix = filename_prefix + squashed_dirs_file_prefix
         else:
+
+            if rel_dir_path == '.':
+                rel_dir_path = ''
+
             dist_path = os.path.join(destination, rel_dir_path)
             current_file_prefix = filename_prefix
 

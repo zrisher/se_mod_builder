@@ -32,20 +32,19 @@ def build_distro():
         print("Please supply a path to your mod as the first argument. Aborting.")
         return
 
-    target_dir = sys.argv[1]
+    target_dir = os.path.realpath(sys.argv[1])
 
     if not os.path.exists(target_dir):
         print("Could not find mod directory at \"" + target_dir + "\". Aborting.")
         return
-
-    print("Running on mod at \"{0}\"".format(target_dir))
 
     # === Get Build Script paths
 
     build_script_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
     build_model_path = os.path.join(build_script_dir, 'build_model.py')
 
-    print("Running from \"{0}\"".format(build_script_dir))
+    print("Running script from  \"{0}\"".format(build_script_dir))
+    print("Running on mod at    \"{0}\"".format(target_dir))
 
     # === Get target mod config
 
@@ -56,7 +55,7 @@ def build_distro():
     build_config_path = os.path.join(target_dir, BUILD_CONFIG_FILENAME)
 
     if os.path.exists(build_config_path):
-        print("Config file found at " + build_config_path)
+        print("Config file found at \"{0}\"".format(build_config_path))
     else:
         print("build_config.yml is missing. Aborting script.")
         return
@@ -118,6 +117,11 @@ def build_distro():
     # Copy Data
     print("--- Copying Data ---")
     lib.build.distribute(source_modules, distributions, [["Data"]], "sbc")
+    print("")
+
+    # Copy Audio
+    print("--- Copying Audio ---")
+    lib.build.distribute(source_modules, distributions, [["Audio"]], "xwm")
     print("")
 
     # Copy Scripts
