@@ -1,2 +1,14 @@
+# project-specific
+config.yml
+build.yml
+
+# pyinstaller
+/build
+/dist
+
+# Python
 *.pyc
+.cache
+
+# Generic
 *.log

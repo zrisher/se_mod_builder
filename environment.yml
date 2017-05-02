@@ -2,8 +2,12 @@ name: se_mod_builder
 channels:
   - defaults
 dependencies:
-  - python>=2.7
+  - python>=3.5,<3.6
   - pip
   - pip:
-    - chardet
+    - argparse
+    - psutil
+    - pyinstaller
+    - pytest
+    - pytest-pep8
     - pyyaml

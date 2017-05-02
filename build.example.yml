@@ -1,0 +1,19 @@
+#
+# SE Mod Builder project configuration file
+#
+
+# All variables have defaults. If the default isn't correct, provide it below.
+# Relative path variables are resolved relative to project dir.
+
+# audio_dir: 'Audio'
+# data_dir: 'Data'
+# load_arms_build_dir: 'Scripts/bin/x64'
+# load_arms_src_paths:
+#   - project_name.dll
+# models_dir: 'Models'
+# properties_dir: 'Scripts/Properties'
+# project_name: 'the name of this directory'
+# repo_name: 'project_name'
+# repo_owner: 'the author of the first commit to this repo'
+# steam_scripts_dir: 'Scripts/Steam'
+# textures_dir: 'Textures'
