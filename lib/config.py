@@ -1,9 +1,9 @@
 import os.path
-
 import re
 import yaml
 
 from . import paths
+
 
 def load(config_file_path):
     """

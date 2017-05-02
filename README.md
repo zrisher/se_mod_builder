@@ -1,6 +1,6 @@
-# SE Mod Helpers - Build Script
-This script assists with the deployment of Space Engineers mods from their
-source/development locations to the SE mods directory for testing and
+# SE Mod Builder
+This package assists with the deployment of Space Engineers mods from their
+development locations to the SE mods directory for testing and
 publishing.
 
 ## Requirements
