@@ -1,4 +1,5 @@
 import os
+import re
 import shutil
 
 
@@ -14,40 +15,52 @@ def erase_dir(dir_path):
         shutil.rmtree(dir_path)
 
 
-def distribute(src, dst, ext):
+def distribute(src, dst, ext, src_ignores=[], dst_ignores=[]):
     """
     Remove everything in dst unless it's up-to-date with a src file.
     Copy all files with `ext` from `src` to `dst` besides already up-to-date.
     Copies recursively and respects folder structure.
     """
+    # normalize all paths for comparison
+    src = os.path.realpath(src)
+    dst = os.path.realpath(dst)
+    ext = ext.lower()
+    src_ignores = [os.path.realpath(os.path.join(src, x)) for x in src_ignores]
+    dst_ignores = [os.path.realpath(os.path.join(dst, x)) for x in dst_ignores]
 
     # Remove all files in dst besides those that are up-to-date already
     for dir_path, dir_names, file_names in os.walk(dst):
         for file_name in file_names:
-            dst_file_path = dir_path + '/' + file_name
-            src_file_path = dst_file_path.replace(dst, src)
-            if not os.path.isfile(src_file_path):
-                print('Deleting orphan file "{}"'.format(dst_file_path))
-                os.remove(dst_file_path)
-            elif os.path.getmtime(dst_file_path) != \
-                    os.path.getmtime(src_file_path):
-                print('Deleting updated file "{}"'.format(dst_file_path))
-                os.remove(dst_file_path)
+            if file_name.lower().endswith(ext):
+                dst_file_path = os.path.join(dir_path, file_name)
+                src_file_path = dst_file_path.replace(dst, src)
+                if any(ignore in dst_file_path for ignore in dst_ignores):
+                    # print('Ignoring dst file "{}"'.format(dst_file_path))
+                    continue
+                if not os.path.isfile(src_file_path):
+                    print('Deleting orphan file "{}"'.format(dst_file_path))
+                    os.remove(dst_file_path)
+                elif os.path.getmtime(dst_file_path) != \
+                        os.path.getmtime(src_file_path):
+                    # print('Deleting updated file "{}"'.format(dst_file_path))
+                    os.remove(dst_file_path)
 
     # Copy all files in src that don't exist in dst
-    ext_lower = ext.lower()
     for dir_path, dir_names, file_names in os.walk(src):
         for file_name in file_names:
-            if file_name.lower().endswith(ext_lower):
-                src_file_path = dir_path + '/' + file_name
+            if file_name.lower().endswith(ext):
+                src_file_path = os.path.join(dir_path, file_name)
                 dst_dir_path = dir_path.replace(src, dst)
                 dst_file_path = src_file_path.replace(src, dst)
+                if any(ignore in src_file_path for ignore in src_ignores):
+                    # print('Ignoring src file "{}"'.format(src_file_path))
+                    continue
+                if os.path.exists(dst_file_path):
+                    # print('Skipping exists "{}"'.format(dst_file_path))
+                    continue
                 if not os.path.isdir(dst_dir_path):
                     create_dir(dst_dir_path)
-                if os.path.exists(dst_file_path):
-                    continue
-                print('Copying "{}" to "{}"'
-                      .format(src_file_path, dst_file_path))
+                print('Copy "{}" to "{}"'.format(src_file_path, dst_file_path))
                 shutil.copy2(src_file_path, dst_file_path)
 
 

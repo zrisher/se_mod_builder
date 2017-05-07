@@ -15,3 +15,14 @@ def set_revision_in_version_info(revision, props_dir):
                 if match:
                     line = match.group(1) + str(revision) + match.group(3)
                 user_file.write(line)
+
+
+def get_version(props_dir):
+    pattern = re.compile(
+        '\[assembly: AssemblyVersion\("(\d*\.\d*\.\d*\.\d*)"\)\]'
+    )
+    with open(props_dir + '\\VersionInfo - User.cs') as file:
+        for line in file:
+            match = pattern.match(line)
+            if match:
+                return match.group(1)

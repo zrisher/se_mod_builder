@@ -1,5 +1,5 @@
 import os
-from ..lib import ops, load_arms, se, mwm
+from ..lib import ops, load_arms, se, mwm, vs
 
 
 def post_build(global_config, project_config, env):
@@ -9,8 +9,8 @@ def post_build(global_config, project_config, env):
     distribute_steam(global_config, project_config)
     se.await_processes_killed()
     distribute_load_arms(global_config, project_config, env)
-    #if env != 'release':
-    #    se.start_process(global_config['se_exe_path'])
+    if env != 'release':
+        se.start_process(global_config['se_exe_path'])
 
 
 def distribute_steam(global_config, project_config):
@@ -26,7 +26,7 @@ def distribute_steam(global_config, project_config):
     scripts_src = project_config['steam_scripts_dir']
     scripts_dst = dst + "\\Data\\Scripts\\" + os.path.basename(scripts_src)
     print('Distributing steam scripts to "{}".'.format(scripts_dst))
-    ops.distribute(scripts_src, scripts_dst, '.cs')
+    ops.distribute(scripts_src, scripts_dst, '.cs', src_ignores=['bin', 'obj'])
 
     # clean dist dir
     ops.recursive_delete_if_empty(dst)
@@ -34,6 +34,7 @@ def distribute_steam(global_config, project_config):
 
 def distribute_load_arms(global_config, project_config, env):
     src = project_config['load_arms_build_dir'] + "\\" + env
+    version = vs.get_version(project_config['properties_dir'])
     print('Distributing load-arms assets from "{}".'.format(src))
     load_arms.run(
         global_config['load_arms_exe_path'],
@@ -41,5 +42,6 @@ def distribute_load_arms(global_config, project_config, env):
         project_config['repo_name'],
         src,
         project_config['load_arms_src_paths'],
+        version=version,
         publish=(env == 'release')
     )
