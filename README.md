@@ -46,18 +46,18 @@ If you have non-standard paths to Git or SE, copy `config.example.yml` to
 your paths.
 
 ##### Project
-Run `se_mod_builder example_config` from your project root to generate an 
+Run `se_mod_builder example-config` from your project root to generate an 
 example `build.yml` project config file there. 
 Edit it to provide any changes specific to your project.
 
 ##### Visual Studio
 For each project in your solution, set the pre-build event to:
 
-`se_mod_builder pre-build --src="../to/root" --env $(ConfigurationName)`
+`se_mod_builder pre-build --src="../to/proj/root" --env $(ConfigurationName)`
 
 And the post-build event to:
 
-`se_mod_builder post-build --src="../to/root" --env $(ConfigurationName)`
+`se_mod_builder post-build --src="../to/proj/root" --env $(ConfigurationName)`
 
 
 ## Usage
@@ -69,7 +69,7 @@ ARMS-Loader. SE will start automatically when finished deploying.
 
 ##### Releasing
 When your code is ready to release:
- * Bump the version in Properties/VersionInfo for each project and commit.
+ * Bump the version in Properties/VersionInfo and commit.
  * Push your code to github and ensure it's merged into master.
  * Change your build to "release" and click "Build". This will publish your
  changes to Load-ARMS.
@@ -77,6 +77,7 @@ When your code is ready to release:
 
 
 ## Contributing
-All changes should be kept on your own fork of SE Mod Builder.
+Contributions are welcome! 
+Maintain your development branches on your own fork and submit PRs when ready.
 
 Run tests and linting with `pytest --pep8`.

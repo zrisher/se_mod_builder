@@ -22,7 +22,7 @@ Distributes to arms loader, publishing if env == 'release'.
 Starts SE unless env == 'release'.
 """
 INSTALL_DIR = os.path.dirname(os.path.realpath(
-    sys.executable if sys.frozen else __file__
+    sys.executable if hasattr(sys, 'frozen') else __file__
 ))
 
 

@@ -107,7 +107,9 @@ def load_project_config(project_dir, global_config):
         [project_dir + "\\Textures"]
     )
 
-    project_name = loaded.get('project_name', str(os.path.basename(project_dir)))
+    project_name = loaded.get(
+        'project_name', str(os.path.basename(project_dir))
+    )
     load_arms_src_paths = get(
         'load_arms_src_paths', loaded, [project_name + '.dll']
     )
