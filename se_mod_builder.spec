@@ -8,7 +8,6 @@ a = Analysis(['se_mod_builder.py'],
              binaries=[],
              datas=[
                ('*.example.yml', '.'),
-               ('config.yml', '.')
              ],
              hiddenimports=[],
              hookspath=[],
@@ -21,16 +20,11 @@ pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
-          exclude_binaries=True,
+          a.binaries,
+          a.zipfiles,
+          a.datas,
           name='se_mod_builder',
           debug=False,
           strip=False,
           upx=True,
           console=True )
-coll = COLLECT(exe,
-               a.binaries,
-               a.zipfiles,
-               a.datas,
-               strip=False,
-               upx=True,
-               name='se_mod_builder')
