@@ -3,7 +3,7 @@ import yaml
 from . import git
 
 
-def load_global_config(install_dir):
+def load_global_config(install_dir, asset_dir):
     # Load config file
     file_path = install_dir + r'\config.yml'
     if os.path.exists(file_path):
@@ -51,6 +51,7 @@ def load_global_config(install_dir):
 
     # Return config dict
     return {
+        'asset_dir': asset_dir,
         'git_exe_path': git_exe_path,
         'install_dir': install_dir,
         'load_arms_exe_path': load_arms_exe_path,

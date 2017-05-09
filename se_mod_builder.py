@@ -4,6 +4,11 @@ from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from src import __version__, tasks
 from src.lib.config import load_global_config, load_project_config
 
+if hasattr(sys, 'frozen'):
+    INSTALL_DIR = os.path.dirname(os.path.realpath(sys.executable))
+    ASSET_DIR = sys._MEIPASS
+else:
+    INSTALL_DIR = ASSET_DIR = os.path.dirname(os.path.realpath(__file__))
 
 DESCRIPTION = """
 Provides tasks to help build and deploy Space Engineers mods.
@@ -24,9 +29,6 @@ Kills SE & Arms Loader processes.
 Distributes to arms loader, publishing if env == 'release'.
 Starts SE unless env == 'release'.
 """
-INSTALL_DIR = os.path.dirname(os.path.realpath(
-    sys.executable if hasattr(sys, 'frozen') else __file__
-))
 
 
 def main():
@@ -68,7 +70,7 @@ def main():
     task = args.task
     print(' ----- SE Mod Builder {} doing {} ----- '.format(__version__, task))
 
-    global_config = load_global_config(INSTALL_DIR)
+    global_config = load_global_config(INSTALL_DIR, ASSET_DIR)
 
     if task == 'example-config':
         tasks.gen_example_project_config(global_config, os.getcwd())
