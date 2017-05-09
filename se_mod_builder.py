@@ -9,12 +9,15 @@ DESCRIPTION = """
 Provides tasks to help build and deploy Space Engineers mods.
 
 example-config
-Generates an example build.yml config file in SRC.
+Should be run from the project root.
+Generates an example build.yml project config file at CWD.
 
 pre-build
+Should be run from a build directory.
 Updates the VersionInfo for your solution with a revision number from git.
 
 post-build
+Should be run from a build directory.
 Builds models.
 Distributes steam assets and scripts to mods folder.
 Kills SE & Arms Loader processes.
@@ -51,27 +54,34 @@ def main():
         default='debug',
     )
     parser.add_argument(
-        '-s', '--src',
-        help='path to source dir, defaults to cwd',
-        default=os.getcwd(),
+        '-b', '--build-dir',
+        help='path to the built plugin files dir, defaults to "."',
+        default='.',
+    )
+    parser.add_argument(
+        '-r', '--root',
+        help='path to project root, defaults to "..\..\..\..\.."',
+        default='..\..\..\..\..'
     )
 
     args = parser.parse_args()
-    env = args.env
-    src = os.path.realpath(args.src)
     task = args.task
-
     print(' ----- SE Mod Builder {} doing {} ----- '.format(__version__, task))
+
     global_config = load_global_config(INSTALL_DIR)
 
     if task == 'example-config':
-        tasks.gen_example_project_config(global_config, src)
-    elif task == 'post-build':
-        project_config = load_project_config(src, global_config)
-        tasks.post_build(global_config, project_config, env)
-    elif task == 'pre-build':
-        project_config = load_project_config(src, global_config)
-        tasks.pre_build(global_config, project_config)
+        tasks.gen_example_project_config(global_config, os.getcwd())
+    else:
+        project_config = load_project_config(
+            os.path.realpath(args.root),
+            os.path.realpath(args.build_dir),
+            global_config
+        )
+        if task == 'post-build':
+            tasks.post_build(global_config, project_config, args.env)
+        elif task == 'pre-build':
+            tasks.pre_build(global_config, project_config)
 
     # return exit code OK
     print(' ----- SE Mod Builder finished {} ----- '.format(task))

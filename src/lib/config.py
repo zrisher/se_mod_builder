@@ -27,13 +27,9 @@ def load_global_config(install_dir):
             r'C:\Program Files (x86)\Git\bin\git.exe'
         ] + github_exe_paths
     )
-    se_data_dir = find_path_or_throw(
-        'se_data_dir', loaded, install_dir,
-        [os.getenv('APPDATA') + "\\SpaceEngineers"]
-    )
     se_mods_dir = find_path_or_throw(
         'se_mods_dir', loaded, install_dir,
-        [se_data_dir + "\\Mods"]
+        [os.path.join(os.getenv('APPDATA'), "SpaceEngineers", "Mods")]
     )
     se_steam_dir = find_path_or_throw(
         'se_steam_dir', loaded, install_dir,
@@ -59,14 +55,16 @@ def load_global_config(install_dir):
         'install_dir': install_dir,
         'load_arms_exe_path': load_arms_exe_path,
         'mwm_exe_path': mwm_exe_path,
-        'se_data_dir': se_data_dir,
         'se_exe_path': se_exe_path,
         'se_mods_dir': se_mods_dir,
         'se_steam_dir': se_steam_dir,
     }
 
 
-def load_project_config(project_dir, global_config):
+def load_project_config(project_dir, plugin_build_dir, global_config):
+    print('Using {}: "{}"'.format('project_dir', project_dir))
+    print('Using {}: "{}"'.format('plugin_build_dir', plugin_build_dir))
+
     # Load config file
     file_path = project_dir + r'\build.yml'
     if os.path.exists(file_path):
@@ -77,62 +75,72 @@ def load_project_config(project_dir, global_config):
               .format(file_path))
         loaded = {}
 
-    # Discover & validate params
-    audio_dir = find_path_or_throw(
-        'audio_dir', loaded, project_dir,
-        [project_dir + "\\Audio"]
+    # Project properties
+    project_name = get(
+        'project_name', loaded, str(os.path.basename(project_dir))
     )
-    data_dir = find_path_or_throw(
-        'data_dir', loaded, project_dir,
-        [project_dir + "\\Data"]
-    )
-    load_arms_build_dir = find_path_or_throw(
-        'load_arms_build_dir', loaded, project_dir,
-        [project_dir + "\\Scripts\\bin\\x64"]
-    )
-    models_dir = find_path_or_throw(
-        'models_dir', loaded, project_dir,
-        [project_dir + "\\Models"]
-    )
-    properties_dir = find_path_or_throw(
-        'properties_dir', loaded, project_dir,
-        [project_dir + "\\Scripts\\Properties"]
-    )
-    steam_scripts_dir = find_path_or_throw(
-        'steam_scripts_dir', loaded, project_dir,
-        [project_dir + "\\Scripts\\Steam"]
-    )
-    textures_dir = find_path_or_throw(
-        'textures_dir', loaded, project_dir,
-        [project_dir + "\\Textures"]
-    )
-
-    project_name = loaded.get(
-        'project_name', str(os.path.basename(project_dir))
-    )
-    load_arms_src_paths = get(
-        'load_arms_src_paths', loaded, [project_name + '.dll']
+    repo_name = get(
+        'repo_name', loaded, project_name
     )
     repo_owner = get(
         'repo_owner', loaded,
         git.first_author(global_config['git_exe_path'], project_dir)
     )
-    repo_name = get('repo_name', loaded, project_name)
+    vs_version_filename = get(
+        'vs_version_filename', loaded, 'VersionInfo.cs'
+    )
+    vs_revision_filename = get(
+        'vs_revision_filename', loaded, 'VersionInfo - User.cs'
+    )
+
+    # Steam Assets
+    steam_audio_dir = find_path_or_throw(
+        'steam_audio_dir', loaded, project_dir,
+        [project_dir + "\\Audio"]
+    )
+    steam_data_dir = find_path_or_throw(
+        'steam_data_dir', loaded, project_dir,
+        [project_dir + "\\Data"]
+    )
+    steam_models_dir = find_path_or_throw(
+        'steam_models_dir', loaded, project_dir,
+        [project_dir + "\\Models"]
+    )
+    steam_scripts_dir = find_path_or_throw(
+        'steam_scripts_dir', loaded, project_dir,
+        [project_dir + "\\Scripts\\Steam"]
+    )
+    steam_textures_dir = find_path_or_throw(
+        'steam_textures_dir', loaded, project_dir,
+        [project_dir + "\\Textures"]
+    )
+
+    # Plugin Assets
+    plugin_props_dir = find_path_or_throw(
+        'plugin_props_dir', loaded, project_dir,
+        [project_dir + "\\Scripts\\Properties"]
+    )
+    plugin_build_files = get(
+        'plugin_build_files', loaded,
+        [project_name + '.dll']
+    )
 
     # Return config dict
     return {
-        'audio_dir': audio_dir,
-        'data_dir': data_dir,
-        'load_arms_build_dir': load_arms_build_dir,
-        'load_arms_src_paths': load_arms_src_paths,
-        'models_dir': models_dir,
-        'properties_dir': properties_dir,
+        'plugin_build_dir': plugin_build_dir,
+        'plugin_build_files': plugin_build_files,
+        'plugin_props_dir': plugin_props_dir,
         'project_dir': project_dir,
         'project_name': project_name,
         'repo_name': repo_name,
         'repo_owner': repo_owner,
+        'steam_audio_dir': steam_audio_dir,
+        'steam_data_dir': steam_data_dir,
+        'steam_models_dir': steam_models_dir,
         'steam_scripts_dir': steam_scripts_dir,
-        'textures_dir': textures_dir
+        'steam_textures_dir': steam_textures_dir,
+        'vs_version_filename': vs_version_filename,
+        'vs_revision_filename': vs_revision_filename
     }
 
 

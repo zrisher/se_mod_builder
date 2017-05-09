@@ -18,6 +18,7 @@ def await_processes_killed():
             except psutil.NoSuchProcess:
                 pass
 
+    time.sleep(1)
     print('SE processes killed.')
 
 

@@ -3,17 +3,23 @@
 #
 
 # All variables have defaults. If the default isn't correct, provide it below.
-# Relative path variables are resolved relative to project dir.
+# All paths are resolved relative to project root except plugin_build_files,
+# which are resolved relative to the build dir.
 
-# audio_dir: 'Audio'
-# data_dir: 'Data'
-# load_arms_build_dir: 'Scripts/bin/x64'
-# load_arms_src_paths:
-#   - project_name.dll
-# models_dir: 'Models'
-# properties_dir: 'Scripts/Properties'
-# project_name: 'the name of this directory'
-# repo_name: 'project_name'
+# project_name: 'project_root_dirname'
+# repo_name: 'project_root_dirname'
 # repo_owner: 'the author of the first commit to this repo'
+# plugin_build_files:
+#   - ProjectName.dll
+# plugin_props_dir: 'Scripts/Properties'
+# steam_audio_dir: 'Audio'
+# steam_data_dir: 'Data'
+# steam_models_dir: 'Models'
 # steam_scripts_dir: 'Scripts/Steam'
-# textures_dir: 'Textures'
+# steam_textures_dir: 'Textures'
+# vs_version_filename: 'VersionInfo.cs'
+# vs_revision_filename: 'VersionInfo - User.cs'
+
+
+
+
