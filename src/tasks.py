@@ -3,6 +3,11 @@ import shutil
 from .lib import git, mwm, ops, se, sepl, vs
 
 
+def build_models(global_config, project_config):
+    model_processes = mwm.start_builds('a', 'b')
+    mwm.await_builds(model_processes)
+
+
 def distribute_steam(global_config, project_config):
     dst = global_config['se_mods_dir'] + "\\" + project_config['project_name']
     print('Distributing steam assets to "{}".'.format(dst))
@@ -24,6 +29,7 @@ def distribute_steam(global_config, project_config):
     ops.recursive_delete_if_empty(dst)
 
 
+"""
 def distribute_plugin(global_config, project_config, publish=False):
     src = project_config['plugin_build_dir']
     version = vs.get_version(
@@ -36,9 +42,10 @@ def distribute_plugin(global_config, project_config, publish=False):
         project_config['plugin_json_path'],
         src, version, publish=publish
     )
+"""
 
 
-def gen_example_project_config(global_config, target_dir):
+def example_config(global_config, target_dir):
     template_path = global_config['asset_dir'] + '\\build.example.yml'
     dst_path = target_dir + '\\build.yml'
     print('Generating project config at "{}" from template at "{}"'
@@ -46,7 +53,7 @@ def gen_example_project_config(global_config, target_dir):
     shutil.copy2(template_path, dst_path)
 
 
-def git_revision(global_config, project_config):
+def git_version(global_config, project_config):
     git_description = git.describe(
         global_config['git_exe_path'],
         project_config['project_dir']
@@ -56,31 +63,17 @@ def git_revision(global_config, project_config):
         revision += 1
     vs.set_revision_in_version_info(
         revision,
-        project_config['plugin_props_dir'] + '\\' +
+        project_config['vs_props_dir'] + '\\' +
         project_config['vs_version_filename'],
-        project_config['plugin_props_dir'] + '\\' +
+        project_config['vs_props_dir'] + '\\' +
         project_config['vs_revision_filename']
     )
 
 
-def post_build(global_config, project_config, restart_se=True, publish=False):
-    if restart_se:
-        se.kill_processes()
-
-    if project_config['build_steam']:
-        model_processes = mwm.start_builds('a', 'b')
-        mwm.await_builds(model_processes)
-        distribute_steam(global_config, project_config)
-
-    if restart_se:
-        se.await_processes_killed()
-
-    if project_config['build_plugin']:
-        distribute_plugin(global_config, project_config, publish=publish)
-
-    if restart_se:
-        se.start_process(global_config['se_exe_path'])
+def kill_se(global_config, project_config):
+    se.kill_processes()
+    se.await_processes_killed()
 
 
-def pre_build(global_config, project_config):
-    git_revision(global_config, project_config)
+def start_se(global_config, project_config):
+    se.start_process(global_config['se_exe_path'])

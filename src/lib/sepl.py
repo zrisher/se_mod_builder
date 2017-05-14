@@ -1,3 +1,4 @@
+"""
 from subprocess import Popen, PIPE
 
 
@@ -16,3 +17,4 @@ def run(exe_path, json_config_path, build_dir, version, publish=False):
         raise ValueError('SEPL error.\nStdout:\n{}\nStderr:\n{}'
                          .format(stdout.decode('ascii'),
                                  stderr.decode('ascii')))
+"""

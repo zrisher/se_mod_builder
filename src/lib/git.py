@@ -13,7 +13,6 @@ def git_version_at_path(exe_path):
         return re.findall(r'\d.*$', stdout.decode('ascii'))[0]
     else:
         raise ValueError('Git error: {}'.format(stderr.decode('ascii')))
-"""
 
 
 def first_commit(exe_path, repo_path):
@@ -35,6 +34,7 @@ def first_author(exe_path, repo_path):
         return stdout.decode('ascii')[1:-2]
     else:
         raise ValueError('Git error: {}'.format(stderr.decode('ascii')))
+"""
 
 
 def describe(exe_path, repo_path):

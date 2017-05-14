@@ -16,6 +16,7 @@ def set_revision_in_version_info(revision, version_path, revision_path):
                 user_file.write(line)
 
 
+"""
 def get_version(version_path):
     pattern = re.compile(
         '\[assembly: AssemblyVersion\("(\d*\.\d*\.\d*\.\d*)"\)\]'
@@ -27,7 +28,7 @@ def get_version(version_path):
                 return match.group(1)
 
 
-"""
+
 return {
     "Build": match.group(1),
     "Major": match.group(2),
