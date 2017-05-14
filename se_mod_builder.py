@@ -25,8 +25,8 @@ post-build
 Should be run from a build directory.
 Builds models.
 Distributes steam assets and scripts to mods folder.
-Kills SE & Arms Loader processes.
-Distributes to arms loader, publishing if env == 'release'.
+Kills SE & SEPL processes.
+Distributes to SEPL, publishing if env == 'release'.
 Starts SE unless env == 'release'.
 """
 
@@ -67,9 +67,11 @@ def main():
     )
 
     args = parser.parse_args()
+    publish = args.env == 'release'
+    restart_se = not publish
     task = args.task
-    print(' ----- SE Mod Builder {} doing {} ----- '.format(__version__, task))
 
+    print(' ----- SE Mod Builder {} doing {} ----- '.format(__version__, task))
     global_config = load_global_config(INSTALL_DIR, ASSET_DIR)
 
     if task == 'example-config':
@@ -77,13 +79,13 @@ def main():
     else:
         project_config = load_project_config(
             os.path.realpath(args.root),
-            os.path.realpath(args.build_dir),
-            global_config
+            os.path.realpath(args.build_dir)
         )
-        if task == 'post-build':
-            tasks.post_build(global_config, project_config, args.env)
-        elif task == 'pre-build':
+        if task == 'pre-build':
             tasks.pre_build(global_config, project_config)
+        if task == 'post-build':
+            tasks.post_build(global_config, project_config,
+                             publish=publish, restart_se=restart_se)
 
     # return exit code OK
     print(' ----- SE Mod Builder finished {} ----- '.format(task))

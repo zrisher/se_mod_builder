@@ -4,7 +4,7 @@ import time
 
 
 SE_PROCESS_NAMES = [
-    "SpaceEngineers.exe", "SpaceEngineersDedicated.exe", "LoadARMS.exe"
+    "SpaceEngineers.exe", "SpaceEngineersDedicated.exe", "PluginManager.exe"
 ]
 
 

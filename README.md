@@ -5,11 +5,11 @@ It provides for basic SE mod deployment:
 * Runs SE asset building tasks (Mwm Builder)
 * Deploys all assets and code distributed through Steam to the SE mods dir
 
-As well as for deploying with [Load-ARMS](https://github.com/Rynchodon/Load-ARMS):
+As well as for deploying with [SE Plugin Loader](https://github.com/Rynchodon/SEPL):
 * Places git-based revision number in the assembly version
-* Stops ARMS-Loader and SE before running ARMS-Loader
-* Runs deployment and release tasks via ARMS-Loader
-* Restarts SE in development
+* Stops SE (and thus SEPL) before running SEPL
+* Runs deployment and release tasks via SEPL
+* Restarts SE
 
 Once you have installed SE Mod Builder and configured your project, 
 you will be able to launch it in SE for development or release it to users by 
@@ -18,8 +18,9 @@ simply selecting your configuration in Visual Studio and clicking "Build".
 
 ## Requirements
 * [Git](https://git-scm.com/downloads) - for releasing and versioning
-* [Load-ARMS](https://github.com/Rynchodon/Load-ARMS) - ensure you've installed
-and configured it following the readme, including setting the Steam plugin flag
+* [SE Plugin Loader](https://github.com/Rynchodon/SEPL) - 
+ensure you've installed and configured it following the readme,
+including setting the Steam plugin flag 
 and providing a local oAuth token for git.
 * [Conda](https://conda.io/docs/) - if you'd like to build SEMB from source
 
@@ -34,7 +35,7 @@ Simply download and run the latest installer from [the releases page](https://gi
 * Run `conda env create` to create the environment
 * Run `conda activate se_mod_builder` to load the environment
 * Run `python se_mod_builder.py args` to use it via python
-* Run `pyinstaller se_mod_builder.spec -y` to generate the executable
+* Run `pyinstaller se_mod_builder.spec` to generate the executable
 * Add the executable to your path
 
 
@@ -64,15 +65,15 @@ And the post-build event to:
 
 ##### Developing
 Simply edit your code and assets, set your configuration to anything besides
-`release`, and click "Build" to deploy all changes to the SE mods folder and
-ARMS-Loader. SE will start automatically when finished deploying.
+`release`, and click "Build" to deploy all changes. 
+SE will start automatically when finished deploying.
 
 ##### Releasing
 When your code is ready to release:
  * Bump the version in Properties/VersionInfo and commit.
  * Push your code to github and ensure it's merged into master.
  * Change your build to "release" and click "Build". This will publish your
- changes to Load-ARMS.
+ changes to SEPL.
  * If you've changed your steam-shipped code, publish it using SE.
 
 

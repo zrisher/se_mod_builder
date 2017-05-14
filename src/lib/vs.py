@@ -25,3 +25,13 @@ def get_version(version_path):
             match = pattern.match(line)
             if match:
                 return match.group(1)
+
+
+"""
+return {
+    "Build": match.group(1),
+    "Major": match.group(2),
+    "Minor": match.group(3),
+    "Revision": match.group(4)
+}
+"""

@@ -3,23 +3,27 @@
 #
 
 # All variables have defaults. If the default isn't correct, provide it below.
-# All paths are resolved relative to project root except plugin_build_files,
-# which are resolved relative to the build dir.
+# All paths are resolved relative to project root.
 
 # project_name: 'project_root_dirname'
-# repo_name: 'project_root_dirname'
-# repo_owner: 'the author of the first commit to this repo'
-# plugin_build_files:
-#   - ProjectName.dll
+
+#
+# Plugin config
+#
+
+# build_plugin: True
+# plugin_json_path: 'plugin.json'
 # plugin_props_dir: 'Scripts/Properties'
+# vs_version_filename: 'VersionInfo.cs'
+# vs_revision_filename: 'VersionInfo - User.cs'
+
+#
+# Steam config
+#
+
+# build_steam: True
 # steam_audio_dir: 'Audio'
 # steam_data_dir: 'Data'
 # steam_models_dir: 'Models'
 # steam_scripts_dir: 'Scripts/Steam'
 # steam_textures_dir: 'Textures'
-# vs_version_filename: 'VersionInfo.cs'
-# vs_revision_filename: 'VersionInfo - User.cs'
-
-
-
-
