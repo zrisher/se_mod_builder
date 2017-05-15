@@ -45,8 +45,16 @@ def distribute_plugin(global_config, project_config, publish=False):
 """
 
 
-def example_config(global_config, target_dir):
-    template_path = global_config['asset_dir'] + '\\build.example.yml'
+def example_global_config(asset_dir, target_dir):
+    template_path = asset_dir + '\\config.example.yml'
+    dst_path = target_dir + '\\config.yml'
+    print('Generating global config at "{}" from template at "{}"'
+          .format(dst_path, template_path))
+    shutil.copy2(template_path, dst_path)
+
+
+def example_project_config(asset_dir, target_dir):
+    template_path = asset_dir + '\\build.example.yml'
     dst_path = target_dir + '\\build.yml'
     print('Generating project config at "{}" from template at "{}"'
           .format(dst_path, template_path))

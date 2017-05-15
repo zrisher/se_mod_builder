@@ -1,40 +1,18 @@
+import os
 import re
 from subprocess import Popen, PIPE
 
 
-"""
-def git_version_at_path(exe_path):
-    \"""
-    Returns the version of git installed at exe_path or None on failure
-    \"""
-    proc = Popen([exe_path, "--version"], stdout=PIPE, stderr=PIPE)
-    (stdout, stderr) = proc.communicate()
-    if proc.returncode == 0:
-        return re.findall(r'\d.*$', stdout.decode('ascii'))[0]
+def github_windows_exe_paths():
+    github_path = os.getenv('LOCALAPPDATA') + "\\GitHub"
+    if os.path.exists(github_path):
+        return [
+            '{}{}\\cmd\\git.exe'.format(github_path, entry)
+            for entry in os.listdir(github_path)
+            if entry.startswith('PortableGit_')
+        ]
     else:
-        raise ValueError('Git error: {}'.format(stderr.decode('ascii')))
-
-
-def first_commit(exe_path, repo_path):
-    proc = Popen([exe_path, "rev-list", "--max-parents=0", "HEAD"],
-                 stdout=PIPE, stderr=PIPE, cwd=repo_path)
-    (stdout, stderr) = proc.communicate()
-    if proc.returncode == 0:
-        return stdout.decode('ascii').strip()
-    else:
-        raise ValueError('Git error: {}'.format(stderr.decode('ascii')))
-
-
-def first_author(exe_path, repo_path):
-    commit = first_commit(exe_path, repo_path)
-    command = [exe_path, "show", "-s", "--format='%an'", commit]
-    proc = Popen(command, stdout=PIPE, stderr=PIPE, cwd=repo_path)
-    (stdout, stderr) = proc.communicate()
-    if proc.returncode == 0:
-        return stdout.decode('ascii')[1:-2]
-    else:
-        raise ValueError('Git error: {}'.format(stderr.decode('ascii')))
-"""
+        return []
 
 
 def describe(exe_path, repo_path):
@@ -77,3 +55,38 @@ def parse_describe_output(out):
         'dirty': dirty,
         'tag': out,
     }
+
+
+"""
+def git_version_at_path(exe_path):
+    \"""
+    Returns the version of git installed at exe_path or None on failure
+    \"""
+    proc = Popen([exe_path, "--version"], stdout=PIPE, stderr=PIPE)
+    (stdout, stderr) = proc.communicate()
+    if proc.returncode == 0:
+        return re.findall(r'\d.*$', stdout.decode('ascii'))[0]
+    else:
+        raise ValueError('Git error: {}'.format(stderr.decode('ascii')))
+
+
+def first_commit(exe_path, repo_path):
+    proc = Popen([exe_path, "rev-list", "--max-parents=0", "HEAD"],
+                 stdout=PIPE, stderr=PIPE, cwd=repo_path)
+    (stdout, stderr) = proc.communicate()
+    if proc.returncode == 0:
+        return stdout.decode('ascii').strip()
+    else:
+        raise ValueError('Git error: {}'.format(stderr.decode('ascii')))
+
+
+def first_author(exe_path, repo_path):
+    commit = first_commit(exe_path, repo_path)
+    command = [exe_path, "show", "-s", "--format='%an'", commit]
+    proc = Popen(command, stdout=PIPE, stderr=PIPE, cwd=repo_path)
+    (stdout, stderr) = proc.communicate()
+    if proc.returncode == 0:
+        return stdout.decode('ascii')[1:-2]
+    else:
+        raise ValueError('Git error: {}'.format(stderr.decode('ascii')))
+"""

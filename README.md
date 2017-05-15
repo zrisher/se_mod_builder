@@ -1,34 +1,41 @@
-# SE Mod Builder
-This package assists with the deployment of Space Engineers mods. 
+# Space Engineers Mod Builder
 
-It provides for basic SE mod deployment:
-* Runs SE asset building tasks (Mwm Builder)
-* Deploys all assets and code distributed through Steam to the SE mods dir
+Space Engineers Mod Builder (SEMB) is a simple program and set of conventions
+that allow users to easily build, distribute, and release Space Engineers mods.
 
-As well as for deploying with [SE Plugin Loader](https://github.com/Rynchodon/SEPL):
-* Places git-based revision number in the assembly version
-* Stops SE (and thus SEPL) before running SEPL
-* Runs deployment and release tasks via SEPL
-* Restarts SE
+SEMB works with both normal mod content distributed through Steam as well as
+plugins distributed through 
+[Space Engineers Plugin Loader](https://github.com/Rynchodon/SEPL)(SEPL).
 
-Once you have installed SE Mod Builder and configured your project, 
-you will be able to launch it in SE for development or release it to users by 
-simply selecting your configuration in Visual Studio and clicking "Build".
+SEMB provides tasks that:
+* Place a git-based revision number in the assembly version (for SEPL)
+* Build model `.mwm` files
+* Distribute steam assets to the SE mods folder.
+* Start and stop SE processes (for SEPL)
+
+These tasks can be easily attached to your Visual Studio build events.
 
 
 ## Requirements
-* [Git](https://git-scm.com/downloads) - for releasing and versioning
-* [SE Plugin Loader](https://github.com/Rynchodon/SEPL) - 
-ensure you've installed and configured it following the readme,
-including setting the Steam plugin flag 
-and providing a local oAuth token for git.
-* [Conda](https://conda.io/docs/) - if you'd like to build SEMB from source
+* Space Engineers
+* If you'd like to build SEPL plugins:
+    * [Git](https://git-scm.com/downloads) - for releasing and versioning
+    * [SE Plugin Loader](https://github.com/Rynchodon/SEPL) -
+    ensure you've installed and configured it, including:
+       * set the Steam plugin flag 
+       * provide a local git with oAuth
+       * create an appropriate config file within your project
+
+* If you'd like to build SEMB from source:
+  * [Conda](https://conda.io/docs/)
 
 
 ## Installation
 
-##### Installing a pre-build release
-Simply download and run the latest installer from [the releases page](https://github.com/zrisher/se_mod_builder/releases).
+##### Installing a pre-built release
+Simply download the latest release from 
+[the releases page](https://github.com/zrisher/se_mod_builder/releases).
+Extract the executable somewhere and add its folder to your path.
 
 ##### Building from source
 * Fork and clone the repo
@@ -42,43 +49,69 @@ Simply download and run the latest installer from [the releases page](https://gi
 ## Configuration
 
 ##### Global
-If you have non-standard paths to Git or SE, copy `config.example.yml` to
-`config.yml` in SE Mod Builder's install directory and edit it to provide 
-your paths.
+If you have non-standard paths to Git or SE, run
 
-##### Project
-Run `se_mod_builder example-config` from your project root to generate an 
-example `build.yml` project config file there. 
+```
+SEModBuilder example-global-config
+```
+
+to generate an example `config.yml` global config file in its install dir. 
+
 Edit it to provide any changes specific to your project.
 
-##### Visual Studio
-For each project in your solution, set the pre-build event to:
+##### Project
+If you have non-standard paths to mod assets within your project, run 
 
-`se_mod_builder pre-build --src="../to/proj/root" --env $(ConfigurationName)`
+```
+SEModBuilder example-project-config
+```
 
-And the post-build event to:
+from your project root 
+to generate an example `build.yml` project config file there. 
 
-`se_mod_builder post-build --src="../to/proj/root" --env $(ConfigurationName)`
+Edit it to provide any changes specific to your project.
 
 
 ## Usage
+SEMB provides many tasks to assist with building your project. Run
 
-##### Developing
-Simply edit your code and assets, set your configuration to anything besides
-`release`, and click "Build" to deploy all changes. 
-SE will start automatically when finished deploying.
+```
+SEModBuilder --help
+```
 
-##### Releasing
-When your code is ready to release:
- * Bump the version in Properties/VersionInfo and commit.
- * Push your code to github and ensure it's merged into master.
- * Change your build to "release" and click "Build". This will publish your
- changes to SEPL.
- * If you've changed your steam-shipped code, publish it using SE.
+to see a list of all of them and what they do.
 
+If you have issues with a particular command, try adding the `--debug` flag.
+
+##### Visual Studio example 
+
+For a full project with both Steam and SEPL assets, your build events might be:
+
+
+pre-build:
+
+```
+SEModBuilder git-version
+```
+
+post-build:
+
+```
+SEModBuilder kill-se
+SEModBuilder build-models
+SEModBuilder distribute-steam
+
+if $(ConfigurationName) == release ( 
+  PluginManager ..\..\..\..\..\plugin.json publish=True
+) else (
+  PluginManager ..\..\..\..\..\plugin.json 
+  SEModBuilder start-se
+)
+```
 
 ## Contributing
 Contributions are welcome! 
+
 Maintain your development branches on your own fork and submit PRs when ready.
 
 Run tests and linting with `pytest --pep8`.

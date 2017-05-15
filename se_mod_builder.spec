@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['se_mod_builder.py'],
-             pathex=['c:\\apps\\zrisher\\se_mod_builder'],
+             pathex=['.'],
              binaries=[],
              datas=[
                ('*.example.yml', '.'),
@@ -23,7 +23,7 @@ exe = EXE(pyz,
           a.binaries,
           a.zipfiles,
           a.datas,
-          name='se_mod_builder',
+          name='SEModBuilder',
           debug=False,
           strip=False,
           upx=True,

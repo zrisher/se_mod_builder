@@ -7,6 +7,8 @@ def start_builds(models_dir, mwm_exe_path):
     TODO
     """
     print('Starting model builds.')
+    print('WARN: Model building not implemented yet. ' +
+          'I will implement as soon as I actually need to build models.')
 
     mwm_processes = []
     # make tmp input/output dirs

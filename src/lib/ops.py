@@ -1,5 +1,6 @@
 import os
 import shutil
+from .logging import log
 
 
 def create_dir(dir_path):
@@ -14,7 +15,7 @@ def erase_dir(dir_path):
         shutil.rmtree(dir_path)
 
 
-def distribute(src, dst, ext, src_ignores=[], dst_ignores=[]):
+def distribute(src, dst, ext, src_ignores=None, dst_ignores=None):
     """
     Remove everything in dst unless it's up-to-date with a src file.
     Copy all files with `ext` from `src` to `dst` besides already up-to-date.
@@ -24,8 +25,15 @@ def distribute(src, dst, ext, src_ignores=[], dst_ignores=[]):
     src = os.path.realpath(src)
     dst = os.path.realpath(dst)
     ext = ext.lower()
+    src_ignores = src_ignores or []
+    dst_ignores = dst_ignores or []
     src_ignores = [os.path.realpath(os.path.join(src, x)) for x in src_ignores]
     dst_ignores = [os.path.realpath(os.path.join(dst, x)) for x in dst_ignores]
+
+    if not os.path.exists(src):
+        log("Skipping distribute {} from \"{}\", path doesn't exist."
+            .format(ext, src))
+        return
 
     # Remove all files in dst besides those that are up-to-date already
     for dir_path, dir_names, file_names in os.walk(dst):
