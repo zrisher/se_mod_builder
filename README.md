@@ -32,12 +32,12 @@ These tasks can be easily attached to your Visual Studio build events.
 
 ## Installation
 
-#### Installing a pre-built release
+### Installing a pre-built release
 Simply download the latest release from 
 [the releases page](https://github.com/zrisher/se_mod_builder/releases).
 Extract the executable somewhere and add its folder to your path.
 
-#### Building from source
+### Building from source
 * Fork and clone the repo
 * Run `conda env create` to create the environment
 * Run `conda activate se_mod_builder` to load the environment
@@ -48,7 +48,7 @@ Extract the executable somewhere and add its folder to your path.
 
 ## Configuration
 
-#### Global
+### Global
 If you have non-standard paths to Git or SE, run
 
 ```
@@ -59,7 +59,7 @@ to generate an example `config.yml` global config file in its install dir.
 
 Edit it to provide any changes specific to your project.
 
-#### Project
+### Project
 If you have non-standard paths to mod assets within your project, run 
 
 ```
@@ -83,18 +83,18 @@ to see a list of all of them and what they do.
 
 If you have issues with a particular command, try adding the `--debug` flag.
 
-#### Visual Studio example
+### Visual Studio example
 
 For a full project with both Steam and SEPL assets, your build events might be:
 
 
-##### pre-build
+#### pre-build
 
 ```
 SEModBuilder git-version
 ```
 
-##### post-build
+#### post-build
 
 ```
 SEModBuilder kill-se
